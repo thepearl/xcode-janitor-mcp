@@ -22,7 +22,7 @@ MCP (Model Context Protocol) server for cleaning up unused assets in Xcode proje
 ### Homebrew (Recommended)
 
 ```bash
-brew install thepearl/xcode-janitor-mcp/xcode-janitor-mcp
+brew install thepearl/tap/xcode-janitor-mcp
 ```
 
 That's it! The `xcode-janitor-mcp` binary will be available in your PATH.
@@ -87,6 +87,11 @@ cd xcode-janitor-mcp && pwd
 **If installed via Homebrew:**
 ```bash
 claude mcp add xcode-janitor xcode-janitor-mcp
+```
+
+Or with full path from Homebrew:
+```bash
+claude mcp add xcode-janitor "$(brew --prefix)/bin/xcode-janitor-mcp"
 ```
 
 **If built from source:**
