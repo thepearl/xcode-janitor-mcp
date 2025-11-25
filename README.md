@@ -19,7 +19,17 @@ MCP (Model Context Protocol) server for cleaning up unused assets in Xcode proje
 
 ## 🚀 Installation
 
+### Homebrew (Recommended)
+
+```bash
+brew install thepearl/xcode-janitor-mcp/xcode-janitor-mcp
+```
+
+That's it! The `xcode-janitor-mcp` binary will be available in your PATH.
+
 ### Build from Source
+
+If you prefer to build from source:
 
 ```bash
 git clone https://github.com/thepearl/xcode-janitor-mcp.git
@@ -34,10 +44,24 @@ The binary will be at `.build/release/XcodeJanitorMCP`
 ./verify-installation.sh
 ```
 
-### General Installation
+## Configure MCP Client
 
-Most MCP clients (Cursor, VS Code, Windsurf, Claude Desktop etc) have standardized on the following JSON configuration format. Add this to your client's JSON configuration `mcpServers` object:
+After installing, configure your MCP client to use Xcode Janitor.
 
+### General Configuration
+
+Most MCP clients (Cursor, VS Code, Windsurf, Claude Desktop etc) use this JSON format. Add to your client's `mcpServers` configuration:
+
+**If installed via Homebrew:**
+```json
+{
+  "xcode-janitor": {
+    "command": "xcode-janitor-mcp"
+  }
+}
+```
+
+**If built from source:**
 ```json
 {
   "xcode-janitor": {
@@ -46,19 +70,27 @@ Most MCP clients (Cursor, VS Code, Windsurf, Claude Desktop etc) have standardiz
 }
 ```
 
-**Important:** Replace `/absolute/path/to` with the full path to your installation directory. You can get it with:
+<details>
+<summary>💡 How to get absolute path for source build</summary>
+
 ```bash
 cd xcode-janitor-mcp && pwd
+# Example output: /Users/you/projects/xcode-janitor-mcp
+# Use: /Users/you/projects/xcode-janitor-mcp/.build/release/XcodeJanitorMCP
 ```
+</details>
 
 ### Specific Client Installation Instructions
 
 #### Claude Code CLI
 
-To use with Claude Code, add it via the command line:
-
+**If installed via Homebrew:**
 ```bash
-# Add xcode-janitor server to Claude Code
+claude mcp add xcode-janitor xcode-janitor-mcp
+```
+
+**If built from source:**
+```bash
 claude mcp add xcode-janitor /absolute/path/to/xcode-janitor-mcp/.build/release/XcodeJanitorMCP
 ```
 
@@ -69,13 +101,25 @@ claude mcp list
 
 You should see:
 ```
-xcode-janitor: /path/to/XcodeJanitorMCP - ✓ Connected
+xcode-janitor: xcode-janitor-mcp - ✓ Connected
 ```
 
 #### Claude Desktop (MacOS)
 
 Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
+**If installed via Homebrew:**
+```json
+{
+  "mcpServers": {
+    "xcode-janitor": {
+      "command": "xcode-janitor-mcp"
+    }
+  }
+}
+```
+
+**If built from source:**
 ```json
 {
   "mcpServers": {
@@ -94,6 +138,16 @@ Restart Claude Desktop after making changes.
 2. Search for "MCP" or "Claude: MCP"
 3. Add server configuration:
 
+**If installed via Homebrew:**
+```json
+{
+  "xcode-janitor": {
+    "command": "xcode-janitor-mcp"
+  }
+}
+```
+
+**If built from source:**
 ```json
 {
   "xcode-janitor": {
