@@ -15,8 +15,8 @@ class XcodeJanitorMcp < Formula
   #   sha256 cellar: :any_skip_relocation, arm64_ventura: "..."
   # end
 
-  depends_on :macos
   depends_on xcode: ["14.0", :build]
+  depends_on :macos
 
   def install
     system "swift", "build", "-c", "release", "--disable-sandbox"
@@ -25,15 +25,16 @@ class XcodeJanitorMcp < Formula
 
   test do
     # Test that the binary exists and is executable
-    assert_predicate bin/"xcode-janitor-mcp", :exist?
+    assert_path_exists bin/"xcode-janitor-mcp"
     assert_predicate bin/"xcode-janitor-mcp", :executable?
 
     # Test basic MCP protocol initialization
     # The server expects JSON-RPC 2.0 initialize message on stdin
-    output = pipe_output("#{bin}/xcode-janitor-mcp 2>&1",
-      '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}',
-      0)
-    assert_match /"result"/, output
-    assert_match /"capabilities"/, output
+    init_msg = '{"jsonrpc":"2.0","id":1,"method":"initialize",' \
+               '"params":{"protocolVersion":"2024-11-05","capabilities":{},' \
+               '"clientInfo":{"name":"test","version":"1.0"}}}'
+    output = pipe_output("#{bin}/xcode-janitor-mcp 2>&1", init_msg)
+    assert_match(/"result"/, output)
+    assert_match(/"capabilities"/, output)
   end
 end
