@@ -26,6 +26,7 @@ brew install thepearl/tap/xcode-janitor-mcp
 ```
 
 That's it! The `xcode-janitor-mcp` binary will be available in your PATH.
+All you have to do now is to [Configure MCP Client](#configure-mcp-client)
 
 ### Build from Source
 
