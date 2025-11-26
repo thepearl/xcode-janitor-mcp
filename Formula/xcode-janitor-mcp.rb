@@ -1,8 +1,8 @@
 class XcodeJanitorMcp < Formula
   desc "MCP server for cleaning unused assets in Xcode projects"
   homepage "https://github.com/thepearl/xcode-janitor-mcp"
-  url "https://github.com/thepearl/xcode-janitor-mcp/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+  url "https://github.com/thepearl/xcode-janitor-mcp/archive/refs/tags/v0.12.0.tar.gz"
+  sha256 "bffcd3be0eb011405d836025b4c3658d8715dec830d3c91a3267d8be66d831e6"
   license "MIT"
 
   depends_on :macos
