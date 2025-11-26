@@ -26,6 +26,12 @@ brew install thepearl/tap/xcode-janitor-mcp
 ```
 
 That's it! The `xcode-janitor-mcp` binary will be available in your PATH.
+
+**Fast Binary Installation:** Homebrew will download a pre-built bottle (binary) instead of compiling from source. This means:
+- ✅ **No Xcode or Command Line Tools required**
+- ✅ **10-second install** instead of 2-3 minute compilation
+- ✅ **Works on macOS 13, 14, 15** (Ventura, Sonoma, Sequoia)
+
 All you have to do now is to [Configure MCP Client](#configure-mcp-client)
 
 ### Build from Source
@@ -564,6 +570,17 @@ MIT License - See LICENSE file for details
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [Claude Code](https://code.visualstudio.com/)
 - [SwiftGen](https://github.com/SwiftGen/SwiftGen)
+
+## 🔧 For Maintainers
+
+See [BOTTLE_WORKFLOW.md](BOTTLE_WORKFLOW.md) for detailed information about the automated Homebrew bottle building and publishing process.
+
+**Quick Release Process:**
+1. Update version in `Formula/xcode-janitor-mcp.rb`
+2. Create PR
+3. Wait for bottles to build (GitHub Actions)
+4. Label PR with `pr-pull`
+5. Workflow auto-merges and publishes bottles
 
 ---
 
