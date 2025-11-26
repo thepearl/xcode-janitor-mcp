@@ -8,7 +8,7 @@ struct XcodeJanitorMCP {
         
         let server = Server(
             name: "xcode-janitor",
-            version: "0.1.0",
+            version: "0.12.0",
             instructions: """
                 Specialized MCP server for Xcode iOS/macOS asset management. Use these tools for:
                 - Finding unused assets in .xcassets catalogs
