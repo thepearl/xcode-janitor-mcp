@@ -9,6 +9,15 @@ struct XcodeJanitorMCP {
         let server = Server(
             name: "xcode-janitor",
             version: "0.1.0",
+            instructions: """
+                Specialized MCP server for Xcode iOS/macOS asset management. Use these tools for:
+                - Finding unused assets in .xcassets catalogs
+                - Analyzing Swift code for UIImage, NSImage, Color asset references
+                - Detecting SwiftGen enum usage
+                - Managing Xcode asset cleanup and optimization
+
+                These tools are optimized for Xcode projects and faster than general code search.
+                """,
             capabilities: .init(
                 tools: .init(listChanged: true)
             )
@@ -23,13 +32,13 @@ struct XcodeJanitorMCP {
             let tools = [
                 Tool(
                     name: "index_assets",
-                    description: "Index all asset catalogs in an Xcode project",
+                    description: "Index all .xcassets asset catalogs in an Xcode iOS/macOS project to find unused assets. Scans for imagesets, colorsets, and datasets.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory containing .xcassets folders")
                             ])
                         ]),
                         "required": .array([.string("project_path")])
@@ -37,25 +46,25 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "find_unused_assets",
-                    description: "Find all unused assets in the indexed project. Results are saved to a file to avoid token usage.",
+                    description: "Find unused Xcode assets (.xcassets) by scanning Swift code for UIImage(named:), NSImage(named:), Color(named:), and SwiftGen enums. Generates HTML and JSON reports. Faster than general code search.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory containing .xcassets and Swift files")
                             ]),
                             "output_file": .object([
                                 "type": .string("string"),
-                                "description": .string("Optional: Path to save results (default: unused_assets_report.json in project root)")
+                                "description": .string("Optional: Custom path to save JSON report (default: unused_assets_report.json in project root). HTML report will be saved alongside.")
                             ]),
                             "minimum_age_days": .object([
                                 "type": .string("integer"),
-                                "description": .string("Optional: Only return assets not modified in X days")
+                                "description": .string("Optional: Only include unused assets not modified in the last X days (useful for filtering recently added assets)")
                             ]),
                             "pattern": .object([
                                 "type": .string("string"),
-                                "description": .string("Optional: Filter by name pattern (supports wildcards)")
+                                "description": .string("Optional: Filter results by asset name pattern using wildcards (e.g., 'icon_*' or '*_legacy')")
                             ])
                         ]),
                         "required": .array([.string("project_path")])
@@ -63,17 +72,17 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "find_asset_usage",
-                    description: "Find where a specific asset is used in code",
+                    description: "Find where a specific Xcode asset is referenced in Swift code. Detects UIImage(named:), NSImage(named:), Color(named:), and SwiftGen enum usage. Use before deleting to verify assets are unused.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory")
                             ]),
                             "asset_name": .object([
                                 "type": .string("string"),
-                                "description": .string("Name of the asset to search for")
+                                "description": .string("Exact name of the asset to search for (e.g., 'icon_home', 'primaryColor')")
                             ])
                         ]),
                         "required": .array([.string("project_path"), .string("asset_name")])
@@ -81,25 +90,25 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "delete_asset",
-                    description: "Delete an asset from the project",
+                    description: "Safely delete unused assets from Xcode .xcassets catalog with automatic backup. Use find_unused_assets first to identify candidates. Supports dry-run mode.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory")
                             ]),
                             "asset_name": .object([
                                 "type": .string("string"),
-                                "description": .string("Name of the asset to delete")
+                                "description": .string("Exact name of the asset to delete from .xcassets catalog")
                             ]),
                             "dry_run": .object([
                                 "type": .string("boolean"),
-                                "description": .string("If true, simulate deletion without actually deleting")
+                                "description": .string("If true, simulates deletion and shows what would be deleted without making changes (recommended for first run)")
                             ]),
                             "create_backup": .object([
                                 "type": .string("boolean"),
-                                "description": .string("If true, create backup before deletion (default: true)")
+                                "description": .string("If true, creates timestamped backup before deletion (default: true, strongly recommended)")
                             ])
                         ]),
                         "required": .array([.string("project_path"), .string("asset_name")])
@@ -107,17 +116,17 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "check_missing_scales",
-                    description: "Check for assets missing @1x, @2x, or @3x variants",
+                    description: "Check for incomplete Xcode imagesets missing @1x, @2x, or @3x resolution variants. Essential for iOS/macOS app asset quality control. Example: detects if an image has @2x but missing @3x for iPhone.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory")
                             ]),
                             "asset_name": .object([
                                 "type": .string("string"),
-                                "description": .string("Optional: Check specific asset only")
+                                "description": .string("Optional: Check only this specific asset name. If omitted, checks all imagesets in project.")
                             ])
                         ]),
                         "required": .array([.string("project_path")])
@@ -125,17 +134,17 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "get_asset_info",
-                    description: "Get detailed information about a specific asset",
+                    description: "Get detailed metadata about a specific Xcode asset including type, catalog location, file path, available scales (@1x/@2x/@3x), and file size. Useful for investigating assets before deletion.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory")
                             ]),
                             "asset_name": .object([
                                 "type": .string("string"),
-                                "description": .string("Name of the asset")
+                                "description": .string("Exact name of the asset to get information about")
                             ])
                         ]),
                         "required": .array([.string("project_path"), .string("asset_name")])
@@ -143,13 +152,13 @@ struct XcodeJanitorMCP {
                 ),
                 Tool(
                     name: "check_swiftgen_status",
-                    description: "Check which assets are managed by SwiftGen configuration",
+                    description: "Check which Xcode assets are managed by SwiftGen code generation (swiftgen.yml). Shows which assets have generated enum constants vs direct string references. Run before unused asset analysis.",
                     inputSchema: .object([
                         "type": .string("object"),
                         "properties": .object([
                             "project_path": .object([
                                 "type": .string("string"),
-                                "description": .string("Path to the Xcode project directory")
+                                "description": .string("Path to the Xcode project root directory containing swiftgen.yml or .swiftgen.yml config file")
                             ])
                         ]),
                         "required": .array([.string("project_path")])
