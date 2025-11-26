@@ -33,12 +33,15 @@ jobs:
       - name: Run brew test-bot --only-setup
         run: brew test-bot --only-setup
 
-      - name: Run brew test-bot --only-tap-syntax
-        run: brew test-bot --only-tap-syntax
+      - name: Run brew style on formula
+        run: brew style Formula/xcode-janitor-mcp.rb
+
+      - name: Run brew audit on formula
+        run: brew audit --strict Formula/xcode-janitor-mcp.rb
 
       - name: Run brew test-bot --only-formulae
         if: github.event_name == 'pull_request'
-        run: brew test-bot --only-formulae
+        run: brew test-bot --only-formulae Formula/xcode-janitor-mcp.rb
 
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
