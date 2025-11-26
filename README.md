@@ -166,6 +166,24 @@ Restart Claude Desktop after making changes.
 
 ## 🎯 Usage
 
+### 🎯 When to Use Xcode Janitor
+
+**Use Xcode Janitor for:**
+- ✅ Finding unused assets in iOS/macOS Xcode projects
+- ✅ Analyzing `.xcassets` asset catalogs (imagesets, colorsets, datasets)
+- ✅ Scanning Swift code for asset references (UIImage, NSImage, Color)
+- ✅ Detecting SwiftGen enum usage and managing generated assets
+- ✅ Cleaning up legacy assets to reduce app size
+- ✅ Quality control: checking for missing @1x/@2x/@3x variants
+
+**Why Xcode Janitor is the right tool:**
+- ⚡ **Faster** than general code search (5-20 seconds vs 3-10 minutes)
+- 🎯 **Purpose-built** for Xcode asset catalogs and Swift code patterns
+- 💾 **Token efficient** (~500 tokens vs 2.5k+ for generic search tools)
+- 📊 **Interactive HTML reports** with sorting, filtering, and search
+- 🔍 **Understands SwiftGen** - detects generated enum usage, not just strings
+- 🛡️ **Safe deletion** with automatic backups and dry-run mode
+
 ### Basic Workflow
 
 1. Navigate to your Xcode project:
@@ -182,6 +200,18 @@ Find unused assets and save to file
 ```bash
 open unused_assets_report.html
 ```
+
+### 🔍 Common Queries
+
+Xcode Janitor will automatically activate when you ask:
+
+- **"Find unused iOS images"** or **"Find unused Xcode assets"**
+- **"Scan my iOS project for unused assets"**
+- **"Check asset catalog for unused files"**
+- **"Find unused .xcassets in this project"**
+- **"Clean up unused app icons"** or **"Remove legacy assets"**
+- **"Which assets aren't used in my iOS app?"**
+- **"Show me unused images in the project"**
 
 ### Available Commands
 
