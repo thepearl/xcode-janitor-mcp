@@ -13,6 +13,9 @@ jobs:
         os: [macos-13, macos-14, macos-15]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
@@ -31,11 +34,11 @@ jobs:
         run: brew test-bot --only-setup
 
       - name: Run brew test-bot --only-tap-syntax
-        run: brew test-bot --only-tap-syntax --tap=thepearl/tap
+        run: brew test-bot --only-tap-syntax
 
       - name: Run brew test-bot --only-formulae
         if: github.event_name == 'pull_request'
-        run: brew test-bot --only-formulae --tap=thepearl/tap
+        run: brew test-bot --only-formulae
 
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
