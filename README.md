@@ -40,11 +40,6 @@ swift build -c release
 
 The binary will be at `.build/release/XcodeJanitorMCP`
 
-**Verify Installation:**
-```bash
-./verify-installation.sh
-```
-
 ## Configure MCP Client
 
 After installing, configure your MCP client to use Xcode Janitor.
